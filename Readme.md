@@ -51,10 +51,15 @@ There are 4 folders
 </ul>
 
 ### `index.js`
-we are running index.js file which is the root file of all the sub connected files.
+we are running index.js file using node.js which is the root file of all the sub connected files.
 
 we are using `express` for managing server.
 
 ### `.env`
 
 Server Port and MongoDB url are stored in `config.env file` for security purpose.
+
+### `Working`
+In index.js file, Router are called as per the url.
+Router checks the method-type and url to call respective controller.
+Controller performs neccessery operation and return useful respond.
