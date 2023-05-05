@@ -3,16 +3,23 @@ const url = require("url");
 
 function isValidUrl(str) {
     try {
-      const parsedUrl = url.parse(str);
-      return parsedUrl.host !== null;
+        const parsedUrl = url.parse(str);
+        return parsedUrl.host !== null;
     } catch (err) {
-      return false;
+        return false;
     }
 }
 
+function validatePhoneNumber(phoneNumber) {
+    const phoneNumberRegex = /^[0-9]{10}$/;
+    return phoneNumberRegex.test(phoneNumber);
+}
+
+
+/*Add Merchant Details */
 async function addMerchantDetails(req, res) {
     const data = req.body;
-    console.log(data);
+    // console.log(data);
     const { restaurantName, contactName, pincode, location, website, phoneNumber, averageDailyTransaction } = data;
 
     //Check all the variable have some value
@@ -28,7 +35,7 @@ async function addMerchantDetails(req, res) {
         if (isRestaurantNameExist) {
             return res.status(409).send({ message: "This restaurant name is already present.", success: false });
         }
-        if(!isValidUrl(website)){
+        if (!isValidUrl(website)) {
             return res.status(409).send({ message: "Invalid website link", success: false });
         }
         if (isWebsiteExist) {
@@ -37,7 +44,7 @@ async function addMerchantDetails(req, res) {
         if (isPhoneNumberExist) {
             return res.status(409).send({ message: "This phone number is already present.", success: false });
         }
-        if(phoneNumber.length !== 10){
+        if (!validatePhoneNumber(phoneNumber)) {
             return res.status(409).send({ message: "Invalid phone number.", success: false });
         }
         //Create a new Marchant and save it
@@ -47,19 +54,24 @@ async function addMerchantDetails(req, res) {
         return res.status(200).send({ message: "Merchant details is successfully registered.", success: true });
     }
     catch (error) {
-        console.log(error);
-        return res.status(500).send({message : "Server Error.", success : false});
+        // console.log(error);
+        if (error.code === 11000) {
+            const field = error.message.split('index: ')[1].split('_')[0];
+            const value = error.message.split('dup key')[1].split(': ')[1].split(' }')[0];
+            return res.status(409).send({ message: `${field} already exists`, success: false });
+        }
+        return res.status(500).send({ message: "Server Error.", success: false });
     }
 }
 
-async function getMerchantDetails(req, res){
-    try{
+async function getMerchantDetails(req, res) {
+    try {
         const merchantList = await MerchantModel.find({});
-        return res.status(200).send({merchantList, success : true});
+        return res.status(200).send({ merchantList, success: true });
     }
-    catch(error){
-        return res.status(500).send({message : "Server Error.", success : false});
+    catch (error) {
+        return res.status(500).send({ message: "Server Error.", success: false });
     }
 }
 
-module.exports = {addMerchantDetails, getMerchantDetails};
+module.exports = { addMerchantDetails, getMerchantDetails };

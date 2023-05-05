@@ -5,4 +5,4 @@ const {addMerchantDetails, getMerchantDetails} = require('../Controller/Merchant
 route.post('/add-merchant-details', addMerchantDetails);
 route.get('/get-merchant-details', getMerchantDetails);
 
-module.exports = route;
+module.exports = route; 
