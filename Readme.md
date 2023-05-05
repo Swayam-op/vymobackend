@@ -60,6 +60,11 @@ we are using `express` for managing server.
 Server Port and MongoDB url are stored in `config.env file` for security purpose.
 
 ### `Working`
-In index.js file, Router are called as per the url.
-Router checks the method-type and url to call respective controller.
-Controller performs neccessery operation and return useful respond.
+<ul>
+<li>In index.js file, Router are called as per the url.</li>
+<li> Router checks the method-type and url to call respective controller. </li>
+<li> Controller performs neccessery operation and return useful respond. </li>
+</ul>
+
+
+
